@@ -1,4 +1,3 @@
 fpdf
-tkinter
-pytest
 ttkbootstrap
+pytest

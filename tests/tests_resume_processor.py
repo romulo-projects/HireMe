@@ -1,22 +1,20 @@
-from collections import Counter
+import pytest
+from automatizador_curriculos.resume_processor import analyze_resume
 
-def analyze_resume(base_resume, keywords):
-    """
-    Analisa o currículo e sugere palavras-chave ausentes.
+def test_analyze_resume_keywords_present():
+    resume_content = "Python e automação são habilidades importantes."
+    keywords = ["python", "automação"]
+    with open("test_curriculo.txt", "w") as f:
+        f.write(resume_content)
     
-    Args:
-        base_resume (str): Caminho para o arquivo do currículo base.
-        keywords (list): Lista de palavras-chave para verificar.
+    missing_keywords = analyze_resume("test_curriculo.txt", keywords)
+    assert missing_keywords == []
+
+def test_analyze_resume_keywords_missing():
+    resume_content = "Python e automação são habilidades importantes."
+    keywords = ["python", "desenvolvimento"]
+    with open("test_curriculo.txt", "w") as f:
+        f.write(resume_content)
     
-    Returns:
-        list: Lista de palavras-chave ausentes no currículo.
-    """
-    try:
-        with open(base_resume, 'r', encoding='utf-8') as file:
-            resume_text = file.read().lower()
-        missing_keywords = [word for word in keywords if word.lower() not in resume_text]
-        return missing_keywords
-    except FileNotFoundError:
-        raise RuntimeError(f"O arquivo {base_resume} não foi encontrado.")
-    except Exception as e:
-        raise RuntimeError(f"Erro ao analisar o currículo: {e}")
+    missing_keywords = analyze_resume("test_curriculo.txt", keywords)
+    assert missing_keywords == ["desenvolvimento"]
