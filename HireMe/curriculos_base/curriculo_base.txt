@@ -1,0 +1,13 @@
+João Silva
+Desenvolvedor de Software
+Email: joao.silva@email.com
+
+Experiência:
+- Desenvolvimento de aplicações web em Python e Django.
+- Criação de scripts de automação.
+
+Habilidades:
+- Python
+- Django
+- HTML/CSS
+- JavaScript

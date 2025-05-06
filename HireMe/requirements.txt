@@ -1,0 +1,4 @@
+fpdf
+tkinter
+pytest
+ttkbootstrap
