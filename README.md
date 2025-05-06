@@ -41,7 +41,7 @@ pip install -r requirements.txt
 
 ```plaintext
 HireMe/
-├── automatizador_curriculos/      # Código principal do projeto
+├── automatization/                # Código principal do projeto
 │   ├── __init__.py                # Inicializador do pacote
 │   ├── gui.py                     # Interface gráfica
 │   ├── pdf_generator.py           # Geração de PDFs
@@ -133,5 +133,5 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir **issues** ou en
 ## 📧 Contato
 
 Se tiver dúvidas ou sugestões, entre em contato:
-- **Autor**: romulopc
-- **Email**: romulopc@email.com
+- **Autor**: Romulo Gomes Della Libera
+- **Email**: romulo.libera@gmail.com
