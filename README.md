@@ -8,8 +8,9 @@
 
 - **Análise de currículos**: Identifica palavras-chave ausentes que podem melhorar o impacto do currículo.
 - **Geração de PDFs personalizados**: Inclui o conteúdo do currículo base e as sugestões de melhorias.
-- **Interface gráfica amigável**: Desenvolvida com `tkinter` para facilitar a interação do usuário.
+- **Interface gráfica amigável**: Desenvolvida com `tkinter` e `ttkbootstrap` para facilitar a interação do usuário.
 - **Suporte a arquivos de texto (`.txt`)**: Ideal para currículos simples.
+- **Mensagens de feedback**: A interface informa sobre sucesso, erros de arquivo e se o currículo já está completo.
 
 ---
 
@@ -31,9 +32,18 @@ pip install -r requirements.txt
    python main.py
    ```
 3. Siga as instruções na interface gráfica:
-   - **Selecione um currículo base**: Escolha um arquivo `.txt` com o conteúdo do seu currículo.
+   - **Selecione um currículo base**: Escolha um arquivo `.txt` com o conteúdo do seu currículo (há exemplos em `curriculos_base/`).
    - **Processar currículo**: Analise o currículo e gere sugestões de melhorias.
    - **Salvar o PDF**: Escolha um local para salvar o PDF gerado.
+
+---
+
+## ℹ️ Observações adicionais
+
+- **Palavras-chave padrão:** As palavras-chave analisadas por padrão são: `python`, `desenvolvimento`, `automação`, `projetos`, `tecnologias`. Para personalizar, edite a lista no arquivo `HireMe/gui.py`.
+- **Modelos de currículo:** Exemplos para teste estão disponíveis na pasta `curriculos_base/`.
+- **Mensagens na interface:** O usuário será informado caso o currículo já esteja completo, se ocorrer erro de arquivo, ou ao salvar o PDF com sucesso.
+- **Formatos suportados:** Apenas arquivos `.txt` são aceitos no momento. Suporte a outros formatos está planejado (ver "Próximos Passos").
 
 ---
 
@@ -49,7 +59,9 @@ HireMe/
 ├── curriculos_base/               # Diretório para currículos de teste
 │   └── curriculo_base.txt         # Exemplo de currículo base
 ├── tests/                         # Testes automatizados
-│   └── tests_resume_processor.py  # Testes para o módulo de processamento
+│   ├── tests_resume_processor.py  # Testes para o módulo de processamento
+│   ├── test_pdf_generator.py      # Testes para o gerador de PDF
+│   └── test_gui.py                # Testes para a interface gráfica
 ├── main.py                        # Ponto de entrada principal
 ├── requirements.txt               # Dependências do projeto
 ├── README.md                      # Documentação do projeto
@@ -64,6 +76,8 @@ Os testes automatizados estão localizados no diretório `tests/`. Para executá
 ```bash
 pytest tests/
 ```
+
+Há testes para o processamento de currículos, geração de PDF e interface gráfica.
 
 Exemplo de um teste para o módulo `resume_processor.py`:
 ```python
@@ -80,7 +94,7 @@ def test_analyze_resume():
 
 Após processar um currículo, você receberá um PDF com o conteúdo do currículo base e as sugestões de palavras-chave ausentes. Aqui está um exemplo de como será o PDF:
 
-- **Currículo Base**:
+- **Currículo Base:**
   ```
   João Silva
   Desenvolvedor de Software
@@ -91,7 +105,7 @@ Após processar um currículo, você receberá um PDF com o conteúdo do curríc
   - Criação de scripts de automação.
   ```
 
-- **Sugestões de Melhorias**:
+- **Sugestões de Melhorias:**
   ```
   --- Sugestões de Melhorias ---
   - Incluir: desenvolvimento
@@ -104,6 +118,7 @@ Após processar um currículo, você receberá um PDF com o conteúdo do curríc
 
 - **Python 3.10**: Linguagem principal do projeto.
 - **tkinter**: Para a interface gráfica.
+- **ttkbootstrap**: Para temas modernos na interface gráfica.
 - **FPDF**: Para gerar PDFs.
 - **pytest**: Para testes automatizados.
 
