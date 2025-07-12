@@ -1,78 +1,56 @@
-import sys
-from pathlib import Path
+import pytest
 import tkinter as tk
-from tkinter import filedialog, messagebox
-from HireMe.resume_processor import analyze_resume
-from HireMe.pdf_generator import generate_pdf_resume
+from unittest.mock import patch, MagicMock
+from HireMe.gui import setup_ui
 
 
-# Adiciona o caminho do projeto ao sys.path (se necessário)
-PROJECT_PATH = Path(__file__).parent.parent
-sys.path.append(str(PROJECT_PATH))
-
-def select_resume_file():
-    """
-    Abre um diálogo para o usuário selecionar o arquivo do currículo base.
-    """
-    file_path = filedialog.askopenfilename(
-        filetypes=[("Arquivos de texto", "*.txt")],
-        title="Selecione o arquivo do currículo base"
-    )
-    if file_path:
-        resume_file_path.set(file_path)
-
-def process_resume():
-    """
-    Analisa o currículo selecionado, verifica palavras-chave ausentes e gera um PDF com sugestões de melhorias.
-    """
-    resume_path = resume_file_path.get()
-    if not resume_path:
-        messagebox.showerror("Erro", "Por favor, selecione um arquivo de currículo.")
-        return
-
+@pytest.mark.skipif(not hasattr(tk, 'Tk'), reason="No display available")
+def test_setup_ui_creates_window():
+    """Testa se a função setup_ui cria uma janela tkinter."""
     try:
-        # Lista de palavras-chave que podem ser ajustadas conforme a necessidade
-        keywords = ["python", "desenvolvimento", "automação", "projetos", "tecnologias"]
-        missing_keywords = analyze_resume(resume_path, keywords)
+        app = setup_ui()
+        
+        # Verifica se retorna uma instância de Tk
+        assert isinstance(app, tk.Tk)
+        
+        # Verifica se o título foi definido
+        assert app.title() == "HireMe - Automatizador de Currículos"
+        
+        # Verifica se a geometria foi definida
+        assert "400x200" in app.geometry()
+        
+        # Fecha a janela para evitar problemas
+        app.destroy()
+    except tk.TclError:
+        pytest.skip("No display available for GUI testing")
 
-        if missing_keywords:
-            output_file = filedialog.asksaveasfilename(
-                defaultextension=".pdf",
-                filetypes=[("Arquivos PDF", "*.pdf")],
-                title="Salvar currículo gerado"
-            )
-            if output_file:
-                generate_pdf_resume(resume_path, missing_keywords, output_file)
-                messagebox.showinfo("Sucesso", "Currículo processado e salvo com sucesso!")
-        else:
-            messagebox.showinfo("Informação", "Nenhuma sugestão necessária. Seu currículo já está completo!")
-    except FileNotFoundError:
-        messagebox.showerror("Erro", "O arquivo do currículo não foi encontrado.")
-    except Exception as e:
-        messagebox.showerror("Erro", f"Erro ao processar o currículo: {e}")
 
-def setup_ui():
-    """
-    Configura a interface gráfica do programa.
-    """
-    global resume_file_path  # Torna a variável disponível para outras funções
-    root = tk.Tk()
-    root.title("HireMe - Automatizador de Currículos")
-    root.geometry("400x200")
-    root.resizable(False, False)
+@patch('HireMe.gui.analyze_resume')
+@patch('HireMe.gui.generate_pdf_resume')
+@patch('tkinter.filedialog.askopenfilename')
+@patch('tkinter.filedialog.asksaveasfilename')
+@patch('tkinter.messagebox.showinfo')
+def test_gui_imports_work(mock_showinfo, mock_saveas, mock_open, mock_generate, mock_analyze):
+    """Testa se todas as importações necessárias funcionam."""
+    # Importa as funções para verificar se não há erros de importação
+    from HireMe.gui import select_resume_file, process_resume, setup_ui
+    
+    # Verifica se as funções existem
+    assert callable(select_resume_file)
+    assert callable(process_resume)
+    assert callable(setup_ui)
 
-    # Inicializa a variável depois de criar o root
-    resume_file_path = tk.StringVar()
 
-    tk.Label(root, text="HireMe - Automatizador de Currículos", font=("Arial", 16, "bold")).pack(pady=10)
-    tk.Button(root, text="Selecionar Currículo Base", command=select_resume_file, width=30).pack(pady=5)
-    tk.Button(root, text="Processar Currículo", command=process_resume, width=30).pack(pady=5)
-    tk.Entry(root, textvariable=resume_file_path, state="readonly", width=50).pack(pady=10)
-
-    tk.Label(root, text="Selecione um arquivo .txt e processe seu currículo.", font=("Arial", 10, "italic")).pack(pady=10)
-    return root
-
-# Inicializa a interface
-if __name__ == "__main__":
-    app = setup_ui()
-    app.mainloop()
+def test_gui_module_structure():
+    """Testa a estrutura básica do módulo GUI."""
+    import HireMe.gui as gui_module
+    
+    # Verifica se as funções principais existem
+    assert hasattr(gui_module, 'setup_ui')
+    assert hasattr(gui_module, 'select_resume_file')
+    assert hasattr(gui_module, 'process_resume')
+    
+    # Verifica se são callable
+    assert callable(gui_module.setup_ui)
+    assert callable(gui_module.select_resume_file)
+    assert callable(gui_module.process_resume)

@@ -1,5 +1,10 @@
 # HireMe
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://img.shields.io/badge/Tests-pytest-green.svg)](https://pytest.org/)
+[![Code Style](https://img.shields.io/badge/Code%20Style-Python-blue.svg)](https://www.python.org/dev/peps/pep-0008/)
+
 **HireMe** é uma ferramenta poderosa para análise e melhoria de currículos. Com uma interface gráfica simples e intuitiva, ela permite que usuários processem currículos, identifiquem palavras-chave ausentes e gerem PDFs personalizados com sugestões de melhorias.
 
 ---
@@ -32,7 +37,7 @@ pip install -r requirements.txt
    python main.py
    ```
 3. Siga as instruções na interface gráfica:
-   - **Selecione um currículo base**: Escolha um arquivo `.txt` com o conteúdo do seu currículo (há exemplos em `curriculos_base/`).
+   - **Selecione um currículo base**: Escolha um arquivo `.txt` com o conteúdo do seu currículo (há exemplos em `modelos_curriculos/`).
    - **Processar currículo**: Analise o currículo e gere sugestões de melhorias.
    - **Salvar o PDF**: Escolha um local para salvar o PDF gerado.
 
@@ -41,7 +46,7 @@ pip install -r requirements.txt
 ## ℹ️ Observações adicionais
 
 - **Palavras-chave padrão:** As palavras-chave analisadas por padrão são: `python`, `desenvolvimento`, `automação`, `projetos`, `tecnologias`. Para personalizar, edite a lista no arquivo `HireMe/gui.py`.
-- **Modelos de currículo:** Exemplos para teste estão disponíveis na pasta `curriculos_base/`.
+- **Modelos de currículo:** Exemplos para teste estão disponíveis na pasta `modelos_curriculos/`.
 - **Mensagens na interface:** O usuário será informado caso o currículo já esteja completo, se ocorrer erro de arquivo, ou ao salvar o PDF com sucesso.
 - **Formatos suportados:** Apenas arquivos `.txt` são aceitos no momento. Suporte a outros formatos está planejado (ver "Próximos Passos").
 
@@ -51,21 +56,22 @@ pip install -r requirements.txt
 
 ```plaintext
 HireMe/
-├── automatization/                # Código principal do projeto
-│   ├── __init__.py                # Inicializador do pacote
-│   ├── gui.py                     # Interface gráfica
-│   ├── pdf_generator.py           # Geração de PDFs
-│   └── resume_processor.py        # Processamento e análise de currículos
-├── curriculos_base/               # Diretório para currículos de teste
-│   └── curriculo_base.txt         # Exemplo de currículo base
-├── tests/                         # Testes automatizados
-│   ├── tests_resume_processor.py  # Testes para o módulo de processamento
-│   ├── test_pdf_generator.py      # Testes para o gerador de PDF
-│   └── test_gui.py                # Testes para a interface gráfica
-├── main.py                        # Ponto de entrada principal
-├── requirements.txt               # Dependências do projeto
-├── README.md                      # Documentação do projeto
-└── __pycache__/                   # Cache de compilação do Python
+├── HireMe/                          # Código principal do projeto
+│   ├── __init__.py                  # Inicializador do pacote
+│   ├── gui.py                       # Interface gráfica
+│   ├── pdf_generator.py             # Geração de PDFs
+│   └── resume_processor.py          # Processamento e análise de currículos
+├── modelos_curriculos/              # Diretório para currículos de teste
+│   └── modelo_curriculo.txt         # Exemplo de currículo base
+├── tests/                           # Testes automatizados
+│   ├── test_resume_processor.py     # Testes para o módulo de processamento
+│   ├── test_pdf_generator.py        # Testes para o gerador de PDF
+│   └── test_gui.py                  # Testes para a interface gráfica
+├── main.py                          # Ponto de entrada principal
+├── requirements.txt                 # Dependências do projeto
+├── LICENSE                          # Licença do projeto
+├── README.md                        # Documentação do projeto
+└── __pycache__/                     # Cache de compilação do Python
 ```
 
 ---
