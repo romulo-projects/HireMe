@@ -1,78 +1,49 @@
-import sys
-from pathlib import Path
-import tkinter as tk
-from tkinter import filedialog, messagebox
-from HireMe.resume_processor import analyze_resume
-from HireMe.pdf_generator import generate_pdf_resume
+import pytest
+import tempfile
+import os
+from unittest.mock import patch, MagicMock
 
 
-# Adiciona o caminho do projeto ao sys.path (se necessário)
-PROJECT_PATH = Path(__file__).parent.parent
-sys.path.append(str(PROJECT_PATH))
-
-def select_resume_file():
+def test_gui_module_imports():
     """
-    Abre um diálogo para o usuário selecionar o arquivo do currículo base.
+    Testa se o módulo GUI pode ser importado corretamente.
     """
-    file_path = filedialog.askopenfilename(
-        filetypes=[("Arquivos de texto", "*.txt")],
-        title="Selecione o arquivo do currículo base"
-    )
-    if file_path:
-        resume_file_path.set(file_path)
-
-def process_resume():
-    """
-    Analisa o currículo selecionado, verifica palavras-chave ausentes e gera um PDF com sugestões de melhorias.
-    """
-    resume_path = resume_file_path.get()
-    if not resume_path:
-        messagebox.showerror("Erro", "Por favor, selecione um arquivo de currículo.")
-        return
-
     try:
-        # Lista de palavras-chave que podem ser ajustadas conforme a necessidade
-        keywords = ["python", "desenvolvimento", "automação", "projetos", "tecnologias"]
-        missing_keywords = analyze_resume(resume_path, keywords)
+        import HireMe.gui
+        assert hasattr(HireMe.gui, 'setup_ui')
+        assert hasattr(HireMe.gui, 'select_resume_file')
+        assert hasattr(HireMe.gui, 'process_resume')
+    except ImportError:
+        pytest.fail("Falha ao importar o módulo GUI")
 
-        if missing_keywords:
-            output_file = filedialog.asksaveasfilename(
-                defaultextension=".pdf",
-                filetypes=[("Arquivos PDF", "*.pdf")],
-                title="Salvar currículo gerado"
-            )
-            if output_file:
-                generate_pdf_resume(resume_path, missing_keywords, output_file)
-                messagebox.showinfo("Sucesso", "Currículo processado e salvo com sucesso!")
-        else:
-            messagebox.showinfo("Informação", "Nenhuma sugestão necessária. Seu currículo já está completo!")
-    except FileNotFoundError:
-        messagebox.showerror("Erro", "O arquivo do currículo não foi encontrado.")
-    except Exception as e:
-        messagebox.showerror("Erro", f"Erro ao processar o currículo: {e}")
 
-def setup_ui():
+@patch.dict('os.environ', {'DISPLAY': ':0'})
+@patch('tkinter.Tk')
+def test_setup_ui_basic(mock_tk):
     """
-    Configura a interface gráfica do programa.
+    Testa se a função setup_ui pode ser chamada.
     """
-    global resume_file_path  # Torna a variável disponível para outras funções
-    root = tk.Tk()
-    root.title("HireMe - Automatizador de Currículos")
-    root.geometry("400x200")
-    root.resizable(False, False)
+    mock_root = MagicMock()
+    mock_tk.return_value = mock_root
+    
+    # Mock StringVar para evitar problemas de tkinter
+    with patch('tkinter.StringVar') as mock_stringvar:
+        mock_stringvar.return_value = MagicMock()
+        
+        from HireMe.gui import setup_ui
+        result = setup_ui()
+        
+        assert result == mock_root
+        mock_tk.assert_called_once()
 
-    # Inicializa a variável depois de criar o root
-    resume_file_path = tk.StringVar()
 
-    tk.Label(root, text="HireMe - Automatizador de Currículos", font=("Arial", 16, "bold")).pack(pady=10)
-    tk.Button(root, text="Selecionar Currículo Base", command=select_resume_file, width=30).pack(pady=5)
-    tk.Button(root, text="Processar Currículo", command=process_resume, width=30).pack(pady=5)
-    tk.Entry(root, textvariable=resume_file_path, state="readonly", width=50).pack(pady=10)
-
-    tk.Label(root, text="Selecione um arquivo .txt e processe seu currículo.", font=("Arial", 10, "italic")).pack(pady=10)
-    return root
-
-# Inicializa a interface
-if __name__ == "__main__":
-    app = setup_ui()
-    app.mainloop()
+def test_gui_functions_exist():
+    """
+    Testa se as principais funções da GUI existem.
+    """
+    from HireMe import gui
+    
+    # Verifica se as funções principais existem
+    assert callable(getattr(gui, 'setup_ui', None))
+    assert callable(getattr(gui, 'select_resume_file', None))
+    assert callable(getattr(gui, 'process_resume', None))
